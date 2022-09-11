@@ -1,14 +1,19 @@
 package app.project.FranchiseMicroservice.controller;
 
 import app.project.FranchiseMicroservice.model.OrderDetails;
+import app.project.FranchiseMicroservice.model.Orders;
 import app.project.FranchiseMicroservice.service.OrderDetailsService;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -42,4 +47,10 @@ public class OrderDetailsController {
         return new ResponseEntity<JSONArray>(jsonArray,HttpStatus.OK);
     }
 
+    //REPORTS REQUESTS
+
+    @GetMapping("/history/{date1}/{date2}")
+    public ResponseEntity<List<OrderDetails>> get_history_reports(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date1, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date2){
+        return new ResponseEntity<List<OrderDetails>>(orderDetailsService.get_history_report(date1,date2),HttpStatus.OK);
+    }
 }
